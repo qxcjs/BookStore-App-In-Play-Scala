@@ -2,12 +2,31 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
-# An example controller showing how to use dependency injection
-GET     /count                      controllers.CountController.count
-# An example controller showing how to write asynchronous code
-GET     /message                    controllers.AsyncController.message
+# Books v1 version
+GET         /books/v1                   controllers.BooksV1Controller.index
+GET         /books/v1/:id               controllers.BooksV1Controller.show(id:Int)
+GET         /books/v1/edit/:id          controllers.BooksV1Controller.edit(id:Int)
+GET         /books/v1/create            controllers.BooksV1Controller.create
+GET         /books/v1/edit              controllers.BooksV1Controller.update
+GET         /books/v1/create            controllers.BooksV1Controller.save
+GET         /books/v1/remove/:id        controllers.BooksV1Controller.destory(id:Int)
 
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(file)
+
+
+# Books
+GET         /books                      controllers.BooksController.index
+GET         /books/add                  controllers.BooksController.create
+GET         /books/show/:id             controllers.BooksController.show(id:Int)
+GET         /books/edit/:id             controllers.BooksController.edit(id:Int)
+GET         /books/modify               controllers.BooksController.update
+GET         /books/delete:id            controllers.BooksController.destory(id:Int)
+POST        /books/save/                controllers.BooksController.save
+
+# Index
+GET         /                           controllers.HomeController.index
+
+# Assets
+GET         /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+#GET     /css/*file                  controllers.Assets.at(path="/public/css", fle)
+#GET     /js/*file                   controllers.Assets.at(path="/public/js", file)
+#GET     /images/*file               controllers.Assets.at(path="/public/images", file)
