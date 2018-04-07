@@ -22,6 +22,11 @@ GET         /books/modify               controllers.BooksController.update
 GET         /books/delete:id            controllers.BooksController.destory(id:Int)
 POST        /books/save/                controllers.BooksController.save
 
+# Widgets
+GET         /widgets/index              controllers.WidgetController.index
+GET         /widgets/list               controllers.WidgetController.listWidgets
+POST        /widgets/create             controllers.WidgetController.createWidget
+
 # Index
 GET         /                           controllers.HomeController.index
 

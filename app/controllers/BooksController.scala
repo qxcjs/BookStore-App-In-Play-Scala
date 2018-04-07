@@ -3,50 +3,35 @@ package controllers
 import javax.inject.{Inject, Singleton}
 
 import models.Book
-import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data._
 import play.api.mvc._
+import forms.BookForm._
 
 @Singleton
-class BooksController @Inject()(messagesAction: MessagesActionBuilder,components: ControllerComponents) extends AbstractController(components) {
-
-  val bookForm = Form(
-    mapping(
-      "id" -> number,
-      "title" -> text,
-      "price" -> number,
-      "author" -> text
-    )(Book.apply)(Book.unapply)
-  )
+class BooksController @Inject()(cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
 
   // for all books
   def index = Action {
     Ok(views.html.books.index(Book.allBooks()))
   }
 
-  //  def create = Action {
-  //    val bookData = bookForm.bindFromRequest().get
-  //    Ok(views.html.books.create())
-  //  }
-
-
-  // for create book
-  def create = messagesAction { implicit request: MessagesRequest[AnyContent] =>
-    Ok(views.html.books.create(bookForm))
+  def create = Action { implicit request: MessagesRequest[AnyContent] =>
+    Ok(views.html.books.create(form))
   }
 
   // for save book
-  def save() =  messagesAction { implicit request: MessagesRequest[AnyContent] =>
-    val errorFunction = { formWithErrors: Form[Book] =>
+  def save() =  Action { implicit request: MessagesRequest[AnyContent] =>
+    val errorFunction = { formWithErrors: Form[Data] =>
       BadRequest(views.html.books.index(Book.allBooks()))
     }
 
-    val successFunction = { book: Book =>
+    val successFunction = { data: Data =>
+      val book = Book(id = data.id,title=data.title, price = data.price,author = data.author)
       Book.add(book)
-      Redirect("/books")
+      Redirect(routes.BooksController.index)
     }
 
-    val formValidationResult = bookForm.bindFromRequest
+    val formValidationResult = form.bindFromRequest
     formValidationResult.fold(errorFunction, successFunction)
   }
 

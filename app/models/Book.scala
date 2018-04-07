@@ -7,8 +7,7 @@ case class Book(
                  title: String,
                  price: Int,
                  author: String
-               ) {
-}
+               )
 
 object Book {
   private val books = ArrayBuffer[Book](
@@ -20,7 +19,7 @@ object Book {
   def allBooks() = books
 
   def add(book: Book) = {
-    books += book
+    books.append(book)
   }
 
   def findById(id: Int): Book = {
