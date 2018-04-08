@@ -2,17 +2,6 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Books v1 version
-GET         /books/v1                   controllers.BooksV1Controller.index
-GET         /books/v1/:id               controllers.BooksV1Controller.show(id:Int)
-GET         /books/v1/edit/:id          controllers.BooksV1Controller.edit(id:Int)
-GET         /books/v1/create            controllers.BooksV1Controller.create
-GET         /books/v1/edit              controllers.BooksV1Controller.update
-GET         /books/v1/create            controllers.BooksV1Controller.save
-GET         /books/v1/remove/:id        controllers.BooksV1Controller.destroy(id:Int)
-
-
-
 # Books
 GET         /books                      controllers.BooksController.index
 GET         /books/add                  controllers.BooksController.create
@@ -21,11 +10,6 @@ GET         /books/edit/:id             controllers.BooksController.edit(id:Int)
 POST        /books/modify               controllers.BooksController.update
 GET         /books/delete/:id           controllers.BooksController.destroy(id:Int)
 POST        /books/save/                controllers.BooksController.save
-
-# Widgets
-GET         /widgets/index              controllers.WidgetController.index
-GET         /widgets/list               controllers.WidgetController.listWidgets
-POST        /widgets/create             controllers.WidgetController.createWidget
 
 # Index
 GET         /                           controllers.HomeController.index
