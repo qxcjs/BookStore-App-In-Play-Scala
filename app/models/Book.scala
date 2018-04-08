@@ -1,7 +1,5 @@
 package models
 
-import scala.collection.mutable.ArrayBuffer
-
 case class Book(
                  id: Int,
                  title: String,
@@ -10,34 +8,27 @@ case class Book(
                )
 
 object Book {
-  private val books = ArrayBuffer[Book](
-    Book(1, "Java", 16, "liss"),
-    Book(2, "C++", 20, "jane"),
-    Book(3, "PHP", 12, "matin"),
+  private val books = scala.collection.mutable.HashMap[Int,Book](
+    1 -> Book(1, "Java", 16, "liss"),
+    2 -> Book(2, "C++", 20, "jane"),
+    3 -> Book(3, "PHP", 12, "matin")
   )
 
-  def allBooks() = books
+  def allBooks() = books.values.toSeq
 
   def add(book: Book) = {
-    books.append(book)
+    books+=(book.id -> book)
   }
 
   def findById(id: Int): Book = {
-    val allBooks = for (book <- books if book.id==id) yield book
-    if(allBooks.isEmpty) null else allBooks(0)
+    books.get(id).getOrElse(null)
   }
 
-  def updateById(oldBook:Book) = {
-    val book = findById(oldBook.id)
-    if(book!=null){
-      deleteById(book.id)
-      add(book)
-    }
+  def updateById(book: Book) = {
+    add(book)
   }
 
-  def deleteById(id:Int) = {
-    for(i <- 0 until books.length){
-      if(findById(id)!=null) books.remove(i)
-    }
+  def deleteById(id: Int) = {
+    books.remove(id)
   }
 }

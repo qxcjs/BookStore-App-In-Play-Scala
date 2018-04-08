@@ -35,14 +35,8 @@ class BooksController @Inject()(cc: MessagesControllerComponents) extends Messag
     formValidationResult.fold(errorFunction, successFunction)
   }
 
-//  def save() = Action(parse.form(bookForm)) { implicit request =>
-//    val bookData = request.body
-//    Book.add(bookData)
-//    Redirect("/books/index")
-//  }
-
   // for edit book
-  def edit(id: Int) = Action {
+  def edit(id: Int) = Action {implicit request: MessagesRequest[AnyContent] =>
     val book: Book = Book.findById(id)
     if (book == null) {
       BadRequest("Not Found the Book !")
@@ -52,8 +46,18 @@ class BooksController @Inject()(cc: MessagesControllerComponents) extends Messag
   }
 
   // for update book
-  def update = Action {
-    Redirect("/books/index")
+  def update = Action {implicit request: MessagesRequest[AnyContent] =>
+    val errorFunction = { formWithErrors: Form[Data] =>
+      BadRequest(views.html.books.index(Book.allBooks()))
+    }
+    val successFunction = { data: Data =>
+      val book = Book(id = data.id,title=data.title, price = data.price,author = data.author)
+      Book.updateById(book)
+      Redirect(routes.BooksController.index)
+    }
+
+    val formValidationResult = form.bindFromRequest
+    formValidationResult.fold(errorFunction, successFunction)
   }
 
   // for book detail
@@ -65,10 +69,10 @@ class BooksController @Inject()(cc: MessagesControllerComponents) extends Messag
       Ok(views.html.books.show(book))
   }
 
-  // for destory book
-  def destory(id: Int) = Action {
+  // for destroy book
+  def destroy(id: Int) = Action {
     Book.deleteById(id)
-    Redirect("/books/index")
+    Redirect(routes.BooksController.index)
   }
 
 }

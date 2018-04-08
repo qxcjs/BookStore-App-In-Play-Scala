@@ -9,7 +9,7 @@ GET         /books/v1/edit/:id          controllers.BooksV1Controller.edit(id:In
 GET         /books/v1/create            controllers.BooksV1Controller.create
 GET         /books/v1/edit              controllers.BooksV1Controller.update
 GET         /books/v1/create            controllers.BooksV1Controller.save
-GET         /books/v1/remove/:id        controllers.BooksV1Controller.destory(id:Int)
+GET         /books/v1/remove/:id        controllers.BooksV1Controller.destroy(id:Int)
 
 
 
@@ -18,8 +18,8 @@ GET         /books                      controllers.BooksController.index
 GET         /books/add                  controllers.BooksController.create
 GET         /books/show/:id             controllers.BooksController.show(id:Int)
 GET         /books/edit/:id             controllers.BooksController.edit(id:Int)
-GET         /books/modify               controllers.BooksController.update
-GET         /books/delete:id            controllers.BooksController.destory(id:Int)
+POST        /books/modify               controllers.BooksController.update
+GET         /books/delete/:id           controllers.BooksController.destroy(id:Int)
 POST        /books/save/                controllers.BooksController.save
 
 # Widgets

@@ -32,8 +32,8 @@ class BooksV1Controller @Inject()(cc: ControllerComponents) extends AbstractCont
       TODO
     }
 
-    // for destory book
-    def destory(id:Int) = {
+    // for destroy book
+    def destroy(id:Int) = {
       TODO
     }
 

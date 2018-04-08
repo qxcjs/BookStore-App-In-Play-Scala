@@ -23,10 +23,6 @@
                 </div>
             </fieldset>
             <a class="btn btn-primary" href="@routes.BooksController.edit(book.id)">Edit</a>
-
-            <button class="btn btn-danger" onclick="sendDeleteRequest(
-                    '@routes.BooksController.destory(book.id)',
-                    '@routes.HomeController.index()'
-            )">Delete</button>
+            <a class="btn btn-danger"  href="@routes.BooksController.destroy(book.id)">Delete</a>
         </form>
     }
