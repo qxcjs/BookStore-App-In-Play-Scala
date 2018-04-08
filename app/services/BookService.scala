@@ -45,7 +45,7 @@ class BookService @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit e
   /**
     * The starting point for all queries on the people table.
     */
-  private val book = TableQuery[BookTable]
+  private val books = TableQuery[BookTable]
 
   /**
     * Create a book with the given title,price and author
@@ -55,9 +55,9 @@ class BookService @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit e
     */
   def create(title: String, price: Int, author: String): Future[Book] = db.run {
     // We create a projection of just the title,price and author columns, since we're not inserting a value for the id column
-    (book.map(b => (b.title, b.price, b.author))
+    (books.map(b => (b.title, b.price, b.author))
       // Now define it to return the id, because we want to know what id was generated for the person
-      returning book.map(_.id)
+      returning books.map(_.id)
       // And we define a transformation for the returned value, which combines our original parameters with the
       // returned id
       into ((nameAge, id) => Book(id, nameAge._1, nameAge._2, nameAge._3))
@@ -69,11 +69,20 @@ class BookService @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit e
     * List all the people in the database.
     */
   def list(): Future[Seq[Book]] = db.run {
-    book.result
+    books.result
   }
 
-  def findById(id: Int): Future[Option[Book]] = db.run(book.filter(_.id === id).result.headOption)
+  def findById(id: Int): Future[Option[Book]] = db.run(books.filter(_.id === id).result.headOption)
 
-  def delete(id: Int): Future[Unit] = db.run(book.filter(_.id === id).delete).map(_ => ())
+  def insert(book: Book): Future[Unit] = db.run(this.books += book).map(_ => ())
+
+  def insert(book: Seq[Book]): Future[Unit] = db.run(this.books ++= book).map(_ => ())
+
+  def update(id: Int, book: Book): Future[Unit] = {
+    val bookToUpdate: Book = book.copy(id)
+    db.run(books.filter(_.id === id).update(bookToUpdate)).map(_ => ())
+  }
+
+  def delete(id: Int): Future[Unit] = db.run(books.filter(_.id === id).delete).map(_ => ())
 
 }

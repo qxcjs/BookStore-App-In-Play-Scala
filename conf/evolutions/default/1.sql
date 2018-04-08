@@ -7,9 +7,6 @@ create table "book" (
   "author" varchar not null
 );
 
-insert into book values('Java',15,'wangwu');
-insert into book values('C++',18,'lisi');
-insert into book values('PHP',12,'zhangsan')
 
 # --- !Downs
 

@@ -1,7 +1,5 @@
 package controllers
 
-import java.util.concurrent.TimeUnit
-import scala.concurrent.duration._
 import javax.inject.{Inject, Singleton}
 
 import models.Book
@@ -25,48 +23,41 @@ class BooksController @Inject()(bookService: BookService, cc: MessagesController
   }
 
   // for save book
-  def save() = Action { implicit request: MessagesRequest[AnyContent] =>
-//    val errorFunction = { errorForm: Form[Data] =>
-//      Future.successful(Ok(views.html.index))
-//    }
-//
-//    val successFunction = { data: Data =>
-//      bookService.create(data.title, data.price, data.author).map { _ =>
-//        Redirect(routes.BooksController.index)
-//      }
-//    }
-//
-//    val formValidationResult = form.bindFromRequest
-//    formValidationResult.fold(errorFunction, successFunction)
-    NotFound
+  def save() = Action.async{ implicit request: MessagesRequest[AnyContent] =>
+    form.bindFromRequest.fold(
+      errorForm => {
+        Future.successful(Ok(views.html.index()))
+      },
+      book => {
+        bookService.create(book.title, book.price, book.author).map { _ =>
+          Redirect(routes.BooksController.index()).flashing("success" -> "user.created")
+        }
+      }
+    )
   }
 
   // for edit book
-  def edit(id: Int) = Action { implicit request: MessagesRequest[AnyContent] =>
-//    val book: Book = bookService.findById(id).result(1 seconds).head
-//    if (book == null) {
-//      BadRequest("Not Found the Book !")
-//    } else {
-//      Ok(views.html.books.edit(book))
-//    }
-    NotFound
+  def edit(id: Int) = Action.async { implicit request: MessagesRequest[AnyContent] =>
+    val bookAndOptions = bookService.findById(id)
+    bookAndOptions.map {
+      case Some(book) => Ok(views.html.books.edit(book))
+      case None => NotFound
+    }
   }
 
   // for update book
   def update = Action { implicit request: MessagesRequest[AnyContent] =>
-//    val errorFunction = { formWithErrors: Form[Data] =>
-//      BadRequest(views.html.books.index(
-//        bookService.list().result(1 seconds)
-//      ))
-//    }
-//    val successFunction = { data: Data =>
-//      val book = Book(id = data.id, title = data.title, price = data.price, author = data.author)
-//      Redirect(routes.BooksController.index)
-//    }
-//
-//    val formValidationResult = form.bindFromRequest
-//    formValidationResult.fold(errorFunction, successFunction)
-    NotFound
+    val errorFunction = { formWithErrors: Form[Data] =>
+      BadRequest(views.html.index())
+    }
+    val successFunction = { data: Data =>
+      val book = Book(id = data.id, title = data.title, price = data.price, author = data.author)
+      bookService.update(data.id,book)
+      Redirect(routes.BooksController.index())
+    }
+
+    val formValidationResult = form.bindFromRequest
+    formValidationResult.fold(errorFunction, successFunction)
   }
 
   // for book detail
@@ -80,7 +71,8 @@ class BooksController @Inject()(bookService: BookService, cc: MessagesController
 
   // for destroy book
   def destroy(id: Int) = Action {
-    Redirect(routes.BooksController.index)
+    bookService.delete(id)
+    Redirect(routes.BooksController.index())
   }
 
 }
