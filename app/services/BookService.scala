@@ -59,6 +59,6 @@ class BookService @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit e
 
   def create(title: String, price: Int, author: String): Future[Int] =
     db.run {
-      sql"""insert into "book"("title","price","author") values (${title}, ${price}, ${author})"""
+      sqlu"""insert into "book"("title","price","author") values (${title}, ${price}, ${author})"""
     }
 }
