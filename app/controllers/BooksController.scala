@@ -30,7 +30,7 @@ class BooksController @Inject()(bookService: BookService, cc: MessagesController
       },
       book => {
         bookService.create(book.title, book.price, book.author).map { _ =>
-          Redirect(routes.BooksController.index()).flashing("success" -> "user.created")
+          Redirect(routes.BooksController.index())
         }
       }
     )
@@ -52,7 +52,7 @@ class BooksController @Inject()(bookService: BookService, cc: MessagesController
     }
     val successFunction = { data: Data =>
       val book = Book(id = data.id, title = data.title, price = data.price, author = data.author)
-      bookService.update(data.id,book)
+      bookService.update(book)
       Redirect(routes.BooksController.index())
     }
 
