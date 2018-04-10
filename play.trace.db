@@ -1,6 +1,0 @@
-2018-04-10 15:47:11 jdbc[4]: exception
-org.h2.jdbc.JdbcSQLException: Table "PERSON" not found; SQL statement:
-INSERT INTO person (id, name) VALUES (1, 'John') [42102-196]
-2018-04-10 15:55:13 jdbc[4]: exception
-org.h2.jdbc.JdbcSQLException: Table "BOOK" not found; SQL statement:
-insert into book(id,title,price,author) values(1,'Java',15,'wangwu') [42102-196]
